@@ -94,7 +94,7 @@ def main():
   username = raw_input("Username:")
   password = getpass.getpass("Password:")
   driver = GetBalance(username, password)
-  drive.close()
+  driver.close()
   display.stop()
 
 if __name__ == "__main__":
