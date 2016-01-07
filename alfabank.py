@@ -6,6 +6,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from pyvirtualdisplay import Display
 
 
 def GetBalance(username, password):
@@ -84,11 +85,21 @@ def GetBalance(username, password):
   #source=driver.page_source
 
 def main():
+  display = Display(visible=0, size=(1366, 768))
+
+  # now Firefox will run in a virtual display. 
+  # you will not see the browser.
+  display.start()
+
   username = raw_input("Username:")
   password = getpass.getpass("Password:")
-  GetBalance(username, password)
+  driver = GetBalance(username, password)
+  drive.close()
+  display.stop()
 
 if __name__ == "__main__":
     main()
 #assert "No results found." not in driver.page_source
 #driver.close()
+
+
