@@ -1,0 +1,22 @@
+Operator and BC-emul
+-------------------------
+O2B
+
+O: login(login, password)
+B: 1. Ok.
+   2. Unsucessful. Error code. 
+
+O: PIN (pin)
+B: 1. Ok.
+   2. Unsuccessful. Error code.
+
+O: Getbalance ()
+B: 1. Value
+   2. Unseccessful. Error code. 
+ 
+--------------------------
+B2O
+
+B: GetPIN ()
+O: 1. PIN.
+   2. Timeout.
