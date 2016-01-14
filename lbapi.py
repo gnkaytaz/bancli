@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import hashlib
 import hmac
 import requests
@@ -5,7 +7,7 @@ from time           import time
 from urllib   import urlencode
 import ConfigParser
 
-params_template = {
+params_template_buy = {
    'price_equation': 'bitfinexusd*USD_in_RUB*0.5', 
    'lat': '1', 
    'lon': '2', 
@@ -14,14 +16,39 @@ params_template = {
    'countrycode': 'RU', 
    'currency': 'RUB', 
    'account_info': 'Nothing', 
-   'bank_name': 'Alfabank', 
-   'msg': 'Test message', 
+   'bank_name': 'Альфабанк', 
+   'msg': '''1. Укажите нужную сумму и начните сделку.
+2. Мои биткойны задепонируются (заблокируются), и мне придет сообщение о новой транзакции. 
+3. Я выйду на связь с вами посредством системы сообщений на LocalBitcoins и подтвержу, что все готово к принятию Вашего платежа.
+4. Я предоставлю Вам номер карты, и вы сделаете платеж. В комментариях к Вашему платежу укажите просто "Мат. помощь". 
+5. Сразу после получения платежа я разблокирую Ваши биткойны и они окажутся у Вас.''', 
    'sms_verification_required': 'yes', 
    'track_max_amount': '0', 
    'require_trusted_by_advertiser': 'yes', 
    'require_identification': 'yes',
    'trade_type': 'ONLINE_BUY',
-   'online_provider': 'QIWI',
+   'online_provider': 'SPECIFIC_BANK',
+   'min_amount': 200,
+   'max_amount': 4000
+}
+
+params_template_sell = {
+   'price_equation': 'bitfinexusd*USD_in_RUB*1.5', 
+   'lat': '1', 
+   'lon': '2', 
+   'city': 'Moscow', 
+   'location_string': 'Moscow, Russia', 
+   'countrycode': 'RU', 
+   'currency': 'RUB', 
+   'account_info': 'Nothing', 
+   'bank_name': 'Альфабанк', 
+   'msg': 'Test message', 
+   'sms_verification_required': 'yes', 
+   'track_max_amount': '0', 
+   'require_trusted_by_advertiser': 'yes', 
+   'require_identification': 'yes',
+   'trade_type': 'ONLINE_SELL',
+   'online_provider': 'SPECIFIC_BANK',
    'min_amount': 200,
    'max_amount': 4000
 }
@@ -86,6 +113,18 @@ def BestPrice(pos,sellbuy):
     elif sellbuy == 'buy':
        bestprice = right - delta 
     return bestprice
+
+
+def publishAds(trade_type, price):
+    if trade_type == 'ONLINE_BUY':
+        params = params_template_buy
+    elif trade_type== 'ONLINE_SELL':
+        params = params_template_sell
+    else:
+        return 1
+    params['price_equation'] = price
+    data = makeRequest('/api/ad-create/', params, 'post')
+    return data
 
 def main():
      params = params_template     
